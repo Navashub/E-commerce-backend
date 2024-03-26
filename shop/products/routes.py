@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, flash, request
+from flask import redirect, render_template, url_for, flash, request, session
 from shop import db, app, photos
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
@@ -16,6 +16,9 @@ def home():
 
 @app.route('/addbrand', methods=['GET', 'POST'])
 def addbrand():
+    if 'email' not in session:
+        flash(f'Please login first', 'danger')
+        return redirect(url_for('login'))
     if request.method == "POST":
         getbrand = request.form.get('brand')
         brand = Brand(name=getbrand)
@@ -49,9 +52,9 @@ def addbrand():
 
 @app.route('/addcat', methods=['GET', 'POST'])
 def addcat():
-    # if 'email' not in session:
-    #     flash(f'Please login first', 'danger')
-    #     return redirect(url_for('login'))
+    if 'email' not in session:
+        flash(f'Please login first', 'danger')
+        return redirect(url_for('login'))
     if request.method == "POST":
         getbrand = request.form.get('category')
         category = Category(name=getbrand)
@@ -78,6 +81,9 @@ def addcat():
 
 @app.route('/addproduct', methods=['POST', 'GET'])
 def addproduct():
+    if 'email' not in session:
+        flash(f'Please login first', 'danger')
+        return redirect(url_for('login'))
     brands = Brand.query.all()
     categories = Category.query.all()
     form = Addproducts(request.form)
