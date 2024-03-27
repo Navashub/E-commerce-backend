@@ -1,10 +1,10 @@
-from flask import redirect, render_template, url_for, flash, request, session
+from flask import redirect, render_template, url_for, flash, request, session,current_app
 from shop import db, app, photos
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 from sqlalchemy.exc import IntegrityError
 
-import secrets
+import secrets,os
 
 
 
@@ -125,6 +125,20 @@ def updateproduct(id):
         product.category_id = category
         product.colors = form.colors.data
         product.stock = form.stock.data
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))
+                product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
+            except:
+                product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
+
+        if request.files.get('image_2'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))
+                product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
+            except:
+                product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
+
         db.session.commit()
         flash(f'Your product has been updated', 'success')
         return redirect('/admin')

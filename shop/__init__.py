@@ -12,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myshop.db'
 app.config['SECRET_KEY'] = 'navasmuller6152'
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images')
 
+
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 # patch_request_class(app) 

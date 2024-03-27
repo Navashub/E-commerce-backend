@@ -9,8 +9,7 @@ class Addproducts(Form):
     description = TextAreaField('Description', [validators.DataRequired()])
     colors = TextAreaField('Colors', [validators.DataRequired()])
 
-    # image_1 = FileField('Image 1', validators=[file_required(), file_allowed(['jpg', 'png', 'jpeg']), 'Images only please'])
-    # image_2 = FileField('Image 2', validators=[file_required(), file_allowed(['jpg', 'png', 'jpeg']), 'Images only please'])
-    image_1 = FileField('Image 1', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only please')])
-    image_2 = FileField('Image 2', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only please')])
+   
+    image_1 = FileField('Image 1', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only please')])
+    image_2 = FileField('Image 2', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only please')])
 
