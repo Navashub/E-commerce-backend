@@ -174,3 +174,23 @@ def updateproduct(id):
     form.description.data = product.desc
 
     return render_template('products/updateproduct.html', title='Update Product page', form=form, brands=brands, categories=categories, product=product)
+
+@app.route('/deleteproduct/<int:id>', methods=['POST'])
+def deleteproduct(id):
+
+    product = Addproduct.query.get_or_404(id)
+    if request.method == "POST":
+        try:
+            os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))
+            os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_2))
+        except Exception as e:
+            print(e)
+        
+        db.session.delete(product)
+        db.session.commit()
+        flash(f'The product {product.name} was deleted from your record', 'success')
+        return redirect(url_for('admin'))
+    
+    flash(f'Cant delete the product', 'danger')
+
+    return redirect(url_for('admin'))
