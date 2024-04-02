@@ -11,7 +11,14 @@ import secrets,os
 @app.route('/')
 def home():
     products = Addproduct.query.filter(Addproduct.stock > 0)
-    return render_template('products/index.html', products=products)
+    brands = Brand.query.all()
+    return render_template('products/index.html', products=products, brands=brands)
+
+
+@app.route('/brand/<int:id>')
+def get_brand(id):
+    brand = Addproduct.query.filter_by(brand_id=id)
+    return render_template('products/index.html', brand=brand)
 
 
 
