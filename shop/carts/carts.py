@@ -22,7 +22,7 @@ def MergeDicts(dict1, dict2):
 def AddCart():
     try:
         product_id = request.form.get('product_id')
-        quantity = request.form.get('quantity')
+        quantity = int(request.form.get('quantity'))
         colors = request.form.get('colors')
         product = Addproduct.query.filter_by(id=product_id).first()
         if product_id and quantity and colors and request.method == "POST":
@@ -31,7 +31,10 @@ def AddCart():
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
-                    print("This product in Cart already")
+                    for key, item in session['Shoppingcart'].items():
+                        if int(key) == int(product_id):
+                            session.modified = True
+                            item['quantity'] += 1
                 else:
                     session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)
@@ -104,3 +107,11 @@ def deleteitem(id):
     except Exception as e:
         print(e)
         return redirect(url_for('getCart'))
+    
+@app.route('/clearcart')
+def clearcart():
+    try:
+        session.pop('Shoppingcart', None)
+        return redirect(url_for('home'))
+    except Exception as e:
+        print(e)
